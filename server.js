@@ -4,8 +4,7 @@ RODRIGO FAURE COMISION 30995
 */
 const express = require("express");
 const app = express();
-const fs = require('fs');
-const fetch = require('node-fetch')
+
 
 const { Server: HttpServer } = require("http");
 const { Server: IOServer } = require("socket.io");
@@ -19,36 +18,6 @@ const knex=require('knex')(options);
 //TEMPLATE ENGINE
 const exphbs = require('express-handlebars');
 const { application } = require("express");
-
-
-//lista de productos al momento de conectar
-const productos = [
-    {
-        "title": "Funko Pop Star Wars: The Mandalorian",
-        "price": 24990,
-        "thumbnail": "https://m.media-amazon.com/images/I/5176rALHhgS._AC_UL480_FMwebp_QL65_.jpg",
-        "id": 1
-      },
-      {
-        "title": "Funko Pop Televisión: Silicon Valley Gilfoyle",
-        "price": 24990,
-        "thumbnail": "https://m.media-amazon.com/images/I/41PsLYv3r2L._AC_.jpg",
-        "id": 2
-      },
-      {
-        "title": "Funko Pop Televisión Marvel: Old Steve Roger",
-        "price": 24990,
-        "thumbnail": "https://m.media-amazon.com/images/I/51d9zjK3DdL._AC_SX466_.jpg",
-        "id": 3
-      }
-  ]
-
-  const mensajes = [
-    { author: "Chat_Bot", text: "Bienvenido, esto son los mensajes disponibles.",
-      fecha: " "
-    }   
- ]
-
 
 
 //SETTINGS
@@ -77,8 +46,8 @@ app.post('/productos', (req, res) => {
             .then(() => {
                 console.log('Producto agregado a la base de datos')
             })
-            // .catch(err => { console.log(err) 
-            // })
+            .catch(err => { console.log(err) 
+            })
             // .finally(() => {
             // knex.destroy();
             // })
@@ -110,9 +79,9 @@ io.on('connection',socket => {
                     socket.emit('productos', productos);
                     socket.emit('mensajes', mensajes)
                })
-        // .catch(err => {
-        //     console.log(err);
-        // })
+        .catch(err => {
+            console.log(err);
+        })
         // .finally(() => {
         //     knex.destroy();
         // })
