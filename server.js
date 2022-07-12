@@ -13,12 +13,15 @@ const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
 const PORT = process.env.PORT || 8080;
 
+const { options } = require('./options')
+const knex=require('knex')(options);
+
 //TEMPLATE ENGINE
 const exphbs = require('express-handlebars');
 const { application } = require("express");
 
-//lista de productos al momento de conectar
 
+//lista de productos al momento de conectar
 const productos = [
     {
         "title": "Funko Pop Star Wars: The Mandalorian",
@@ -46,6 +49,8 @@ const productos = [
     }   
  ]
 
+
+
 //SETTINGS
 app.engine('handlebars', exphbs.engine())
 app.set('view engine', 'handlebars')
@@ -67,24 +72,21 @@ app.get('/', (req, res) => {
 app.post('/productos', (req, res) => {
     try {
         const nuevoProducto = req.body;
-        if (productos.length == 0) {
-            nuevoProducto.id = 1
-        } else {
-            const identificadores = [];
-            productos.forEach(element => identificadores.push(element.id));
-            nuevoProducto.id = (Math.max(...identificadores) + 1);
-        }
-        productos.push(nuevoProducto)
-        let prodString = JSON.stringify(productos, null, 2)
-        fs.promises.writeFile("productos.txt", prodString);
-        console.log('producto guardado')
+            knex('productos')
+            .insert(nuevoProducto)
+            .then(() => {
+                console.log('Producto agregado a la base de datos')
+            })
+            .catch(err => { console.log(err) 
+            })
+            .finally(() => {
+            knex.destroy();
+            })
         res.redirect('/')
     }
-
-    catch (error) {
-        console.log('Ha ocurrido un error en el proceso', error)
-    }
-})
+    catch(error) { console.log('Ha ocurrido un error en el proceso', error)}
+    
+    })
 
 //server websocket
 io.on('connection',socket => {

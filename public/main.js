@@ -21,7 +21,7 @@ function renderTabla(data) {
         const tabla = data.map((elem) => {
             return (`  
                    <tr>                  
-                    <td> ${elem.id} </td>
+                    <td> ${elem.codigo} </td>
                     <td> ${elem.title} </td>
                     <td> ${elem.price} </td>
                     <td> <img src= ${elem.thumbnail} alt=${elem.title}} width="40px"></td>
@@ -45,9 +45,9 @@ function renderMensajes(mensajes) {
 
         const chatWeb = mensajes.map((elem) => {
         return (`<div>
-        <span style = "color:blue;"> <b>${elem.author}</b>: </span> 
-        <span style = "color:brown;"> ${elem.fecha} </style> </span>
-        <span style = "color: green; font-style:italic "<em>${elem.text}</em> </span>
+        <span style = "color:blue;"> <b>${elem.user}</b>: </span> 
+        <span style = "color:brown;"> ${elem.timestamp} </style> </span>
+        <span style = "color: green; font-style:italic "<em>${elem.mensaje}</em> </span>
             </div>`)
     }).join(" ");
     document.querySelector("#messages").innerHTML = chatWeb;
@@ -58,9 +58,9 @@ function addMessage(e) {
 
     if (email.value) {
         const mensaje = {
-            author: document.getElementById('username').value,
-            text: document.getElementById('texto').value,
-            fecha: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}-${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+            user: document.getElementById('username').value,
+            mensaje: document.getElementById('texto').value,
+            timestamp: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}-${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
         };
         socket.emit('new-mensaje', mensaje);
         return false;
