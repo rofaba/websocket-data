@@ -30,7 +30,7 @@ function renderTabla(data) {
         })
         document.querySelector(".table").innerHTML = `
         <tr>
-        <th> Id</th>
+        <th> Código</th>
         <th> Nombre </th>
         <th> Precio </th>
         <th> Imagen </th>    
@@ -47,7 +47,7 @@ function renderMensajes(mensajes) {
         return (`<div>
         <span style = "color:blue;"> <b>${elem.user}</b>: </span> 
         <span style = "color:brown;"> ${elem.timestamp} </style> </span>
-        <span style = "color: green; font-style:italic "<em>${elem.mensaje}</em> </span>
+        <span style = "color: green; font-style:italic "<em>${elem.message}</em> </span>
             </div>`)
     }).join(" ");
     document.querySelector("#messages").innerHTML = chatWeb;
@@ -59,7 +59,7 @@ function addMessage(e) {
     if (email.value) {
         const mensaje = {
             user: document.getElementById('username').value,
-            mensaje: document.getElementById('texto').value,
+            message: document.getElementById('texto').value,
             timestamp: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}-${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
         };
         socket.emit('new-mensaje', mensaje);

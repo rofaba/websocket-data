@@ -91,18 +91,57 @@ app.post('/productos', (req, res) => {
 //server websocket
 io.on('connection',socket => {
     console.log('Un cliente se ha conectado');
-    socket.emit('productos', productos); //enviar productos
-    socket.emit('mensajes', mensajes)
+    //lee productos desde BD
+    knex
+        .from('productos')
+        .select('*')
+        .orderBy('id', 'desc')
+        .then((rows) => {
+            const productos = rows;
 
-    socket.on('new-mensaje', data => {
-        mensajes.push(data);
-        io.sockets.emit('mensajes', mensajes);
-        let msgString = JSON.stringify(mensajes, null, 2)
-            fs.promises.writeFile("mensajes.txt", msgString);
-            console.log('texto guardado')
+        //lee mensajes desde BD 
+            knex
+                .from('mensajes')
+                .select('*')
+                .orderBy('id', 'desc')
+                .then((rowsmensajes) => {
+                    const mensajes = rowsmensajes;
+                    
+                    socket.emit('productos', productos);
+                    socket.emit('mensajes', mensajes)
+               })
+        // .catch(err => {
+        //     console.log(err);
+        // })
+        // .finally(() => {
+        //     knex.destroy();
+        // })
+        socket.on('new-mensaje', data => {
+            console.log(data)
+            
+            try {
+                    knex('mensajes')
+                    .insert(data)
+                    .then(() => {
+                        console.log('Mensaje agregado a la base de datos')
+                    })
+                    // .catch(err => { console.log(err) 
+                    // })
+                    // .finally(() => {
+                    // knex.destroy();
+                    // })
+                    io.sockets.emit('mensajes', mensajes);
+
+                // res.redirect('/')
+            }
+            catch(error) { console.log('Ha ocurrido un error en el proceso', error)}
+            
+            })
             
     });
  });
+
+//FIN
 
  //404
  app.use((req, res, next) => {
