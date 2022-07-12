@@ -77,11 +77,11 @@ app.post('/productos', (req, res) => {
             .then(() => {
                 console.log('Producto agregado a la base de datos')
             })
-            .catch(err => { console.log(err) 
-            })
-            .finally(() => {
-            knex.destroy();
-            })
+            // .catch(err => { console.log(err) 
+            // })
+            // .finally(() => {
+            // knex.destroy();
+            // })
         res.redirect('/')
     }
     catch(error) { console.log('Ha ocurrido un error en el proceso', error)}
