@@ -12,7 +12,8 @@ const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
 const PORT = process.env.PORT || 8080;
 
-const { options } = require('./options')
+const { options } = require('./src/options')
+
 const knex=require('knex')(options);
 
 //TEMPLATE ENGINE
@@ -69,6 +70,7 @@ io.on('connection',socket => {
             const productos = rows;
 
         //lee mensajes desde BD 
+        
             knex
                 .from('mensajes')
                 .select('*')

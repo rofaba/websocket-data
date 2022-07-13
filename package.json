@@ -12,7 +12,7 @@
   "name": "websockets",
   "description": "Repositorio de GitHub",
   "version": "1.0.0",
-  "main": "app-hbs.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
